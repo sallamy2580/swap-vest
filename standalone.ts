@@ -29,10 +29,19 @@ async function main() {
         claimBlock: Number(program.opts().claimBlock ?? undefined)//await sushiData.utils.timestampToBlock(Date.now())) - will enable when subgraph switches to mainnet
     }
 
+    const distribution = await getDistribution(options);
+
     fs.writeFileSync(
-        `./outputs/${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
+        `./outputs/amounts-${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
         JSON.stringify(
-            await getDistribution(options), null, 1
+            distribution.amounts, null, 1
         )
     );
+
+    fs.writeFileSync(
+        `./outputs/merkle-${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
+        JSON.stringify(
+            distribution.merkle, null, 1
+        )
+    )
 };

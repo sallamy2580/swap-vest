@@ -16,13 +16,7 @@ type Pools = sushiData.masterchef.Pool[];
 
 type Claims = sushiData.vesting.User[];
 
-type Users = {
-    poolId: number, 
-    address: string, 
-    amount: number, 
-    rewardDebt: bigint, 
-    sushiHarvested: number
-}[];
+type Users = sushiData.masterchef.User[];
 
 export default {
     async info(block_number: number): Promise<Info> {   
@@ -37,33 +31,7 @@ export default {
         return await sushiData.vesting.users({block: block_number})
     },
 
-    // Probably should add it to sushi-data
     async users(block_number: number): Promise<Users> {
-        return pageResults({
-            api: graphAPIEndpoints.masterchef,
-            query: {
-                entity: 'users',
-                selection: {
-                    block: {number: block_number},
-                },
-                properties: [
-                    'id',
-                    'address',
-                    'amount',
-                    'rewardDebt',
-                    'sushiHarvested',
-                ],
-            },
-        })
-            .then(results =>
-                results.map(({ id, address, amount, rewardDebt, sushiHarvested }) => ({
-                    poolId: Number(id.split("-")[0]),
-                    address: String(address),
-                    amount: Number(amount),
-                    rewardDebt: BigInt(rewardDebt),
-                    sushiHarvested: Number(sushiHarvested),
-                })),
-            )
-            .catch(err => console.log(err));
-    },
+        return await sushiData.masterchef.users({block: block_number});
+    }
 }

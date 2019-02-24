@@ -3,3 +3,5 @@ node_modules
 test.ts
 
 outputs
+
+yarn-error.log

@@ -1,7 +1,8 @@
 import sushiData from '@sushiswap/sushi-data';
+import { parseBalanceMap } from './scripts/parse-balance-map'
 
 import queries from './queries';
-import { VESTING_POOL_ID} from "./constants";
+import { VESTING_POOL_ID } from "./constants";
 import redirects from './redirects.json';
 
 type Info = sushiData.masterchef.Info;
@@ -10,13 +11,7 @@ type Pools = sushiData.masterchef.Pool[];
 
 type Claims = sushiData.vesting.User[];
 
-type User = {
-    poolId: number, 
-    address: string, 
-    amount: number, 
-    rewardDebt: bigint, 
-    sushiHarvested: number
-};
+type User = sushiData.masterchef.User;
 
 type UsersConsolidated = {
     address: string,
@@ -50,7 +45,10 @@ export default async function getDistribution(options: Options) {
         calculateTotalVested(data, options)
     );
 
-    return final;
+    return {
+        amounts: final, 
+        merkle: parseBalanceMap(final)
+    };
 }
 
 async function fetchData(startBlock: number, endBlock: number, claimBlock: number) {
@@ -137,10 +135,10 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
     const fraction = totalVested / totalFarmed;
 
     return users
-        .filter(user => user.amount !== 0)
+        .filter(user => user.amount >= 1e-18)
         .map(user => ({
-            [user.address]: String(BigInt(Math.floor((user.amount * fraction) * 1e18)))
-    }));
+            [user.address]: String(BigInt(Math.floor((user.amount * fraction) * 1e18)))}))
+        .reduce((a, b) => ({...a, ...b}), {});
 }
 
 function calculateTotalVested(data: Data, options: Options) {
