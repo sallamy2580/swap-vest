@@ -42,7 +42,8 @@ export default async function getDistribution(options: Options) {
     const final = finalize(
         consolidate(data.beginning, options.startBlock),
         consolidate(data.end, options.endBlock),
-        calculateTotalVested(data, options)
+        calculateTotalVested(data, options),
+        data.end.claims
     );
 
     return {
@@ -108,12 +109,9 @@ function consolidate(data: DataPart, block: number) {
 
         const harvested = userPools.reduce((a, b) => a + b.sushiHarvested, 0);
 
-        // If we're calculating the beginning, the array will be empty => 0. If the user hasn't claimed anything yet, he won't be present in the array => 0.
-        const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
-
         return ({
             address: user.address,
-            amount: pending + harvested - claimed
+            amount: pending + harvested
         });
     });
 
@@ -122,7 +120,7 @@ function consolidate(data: DataPart, block: number) {
         .filter((v,i,a) => a.findIndex(t => (t.address === v.address)) === i);
 }
 
-function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated, totalVested: number) {
+function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated, totalVested: number, claims: Claims) {
     const users = usersEnd.map(userEnd => {
         return ({
             address: userEnd.address,
@@ -136,8 +134,15 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
 
     return users
         .filter(user => user.amount >= 1e-18)
-        .map(user => ({
-            [user.address]: String(BigInt(Math.floor((user.amount * fraction) * 1e18)))}))
+        .map(user => {
+            const vested = user.amount * fraction;
+
+            const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
+
+            return ({
+                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+            })
+        })
         .reduce((a, b) => ({...a, ...b}), {});
 }
 
