@@ -4,4 +4,6 @@ test.ts
 
 outputs
 
+dist
+
 yarn-error.log
