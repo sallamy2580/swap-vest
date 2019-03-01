@@ -2,7 +2,7 @@ import sushiData from '@sushiswap/sushi-data';
 import { parseBalanceMap } from './parse-balance-map'
 
 import queries from './queries';
-import { VESTING_POOL_ID } from "./constants";
+import { VESTING_POOL_ID, VESTING_START } from "./constants";
 import redirects from './redirects.json';
 
 type Info = sushiData.masterchef.Info;
@@ -19,9 +19,9 @@ type UsersConsolidated = {
 }[];
 
 type Options = {
-    startBlock: number,
+    startBlock: number | undefined,
     endBlock: number,
-    claimBlock: number
+    claimBlock: number | undefined
 };
 
 type DataPart = {
@@ -37,6 +37,9 @@ type Data = {
 };
 
 export default async function getDistribution(options: Options) {
+    options.startBlock = options.startBlock ?? VESTING_START;
+    options.claimBlock = options.claimBlock ?? (await sushiData.blocks.latestBlock()).number;
+
     // Fetch the data and redirect the addresses right away
     const data = redirect(await fetchData(options.startBlock, options.endBlock, options.claimBlock));
     const final = finalize(
@@ -95,7 +98,7 @@ function redirect(data: Data) {
 
 // Removes duplicate and calculates balances
 function consolidate(data: DataPart, block: number) {
-    const [users, pools, claims, totalAllocPoint] = [data.users, data.pools, data.claims, data.info.totalAllocPoint];
+    const [users, pools, totalAllocPoint] = [data.users, data.pools, data.info.totalAllocPoint];
 
     // May run multiple times for one address if it's in multiple pools
     const consolidated: UsersConsolidated = users.map(user => {
@@ -152,7 +155,7 @@ function calculateTotalVested(data: Data, options: Options) {
     const vestedStart = data.beginning.users
         .filter(user => user.poolId === VESTING_POOL_ID)
         .map(user => {
-            const pending = pendingSushi(startBlock, data.beginning.info.totalAllocPoint, data.beginning.pools, user);
+            const pending = pendingSushi(startBlock!, data.beginning.info.totalAllocPoint, data.beginning.pools, user);
             const harvested = user.sushiHarvested;
             return pending + harvested;
         })

@@ -1,7 +1,7 @@
 declare type Options = {
-    startBlock: number;
+    startBlock: number | undefined;
     endBlock: number;
-    claimBlock: number;
+    claimBlock: number | undefined;
 };
 export default function getDistribution(options: Options): Promise<{
     amounts: {

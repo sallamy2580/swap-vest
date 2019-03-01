@@ -3,11 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const sushi_data_1 = __importDefault(require("@sushiswap/sushi-data"));
 const parse_balance_map_1 = require("./parse-balance-map");
 const queries_1 = __importDefault(require("./queries"));
 const constants_1 = require("./constants");
 const redirects_json_1 = __importDefault(require("./redirects.json"));
 async function getDistribution(options) {
+    var _a, _b;
+    options.startBlock = (_a = options.startBlock) !== null && _a !== void 0 ? _a : constants_1.VESTING_START;
+    options.claimBlock = (_b = options.claimBlock) !== null && _b !== void 0 ? _b : (await sushi_data_1.default.blocks.latestBlock()).number;
     // Fetch the data and redirect the addresses right away
     const data = redirect(await fetchData(options.startBlock, options.endBlock, options.claimBlock));
     const final = finalize(consolidate(data.beginning, options.startBlock), consolidate(data.end, options.endBlock), calculateTotalVested(data, options), data.end.claims);
@@ -53,7 +57,7 @@ function redirect(data) {
 }
 // Removes duplicate and calculates balances
 function consolidate(data, block) {
-    const [users, pools, claims, totalAllocPoint] = [data.users, data.pools, data.claims, data.info.totalAllocPoint];
+    const [users, pools, totalAllocPoint] = [data.users, data.pools, data.info.totalAllocPoint];
     // May run multiple times for one address if it's in multiple pools
     const consolidated = users.map(user => {
         const userPools = users
