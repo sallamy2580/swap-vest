@@ -18,7 +18,7 @@
     "@types/node": "^14.14.31"
   },
   "scripts": {
-    "standalone": "ts-node standalone",
+    "standalone": "ts-node src/standalone",
     "pack": "webpack --mode production",
     "prepublish": "yarn run pack"
   }
