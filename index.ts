@@ -1,8 +1,8 @@
 import sushiData from '@sushiswap/sushi-data';
 import { parseBalanceMap } from './scripts/parse-balance-map'
 
-import queries from './queries';
-import { VESTING_POOL_ID } from "./constants";
+import queries from './src/queries';
+import { VESTING_POOL_ID } from "./src/constants";
 import redirects from './redirects.json';
 
 type Info = sushiData.masterchef.Info;
