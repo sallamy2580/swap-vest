@@ -3,7 +3,7 @@ import fs from "fs";
 import sushiData from '@sushiswap/sushi-data';
 
 import getDistribution from './index';
-import { VESTING_START } from "./src/constants";
+import { VESTING_START } from "./constants";
 
 const program = new Command();
 

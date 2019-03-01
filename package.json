@@ -2,7 +2,7 @@
   "name": "sushi-vesting-query",
   "author": "LufyCZ",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "dist/bundle.js",
   "license": "MIT",
   "dependencies": {
     "@sushiswap/sushi-data": "lufycz/sushi-data#vesting",
@@ -23,6 +23,6 @@
   "scripts": {
     "standalone": "ts-node standalone",
     "pack": "webpack --mode production",
-		"prepublish": "yarn run pack"
+    "prepublish": "yarn run pack"
   }
 }
