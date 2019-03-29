@@ -2,8 +2,10 @@ import sushiData from '@sushiswap/sushi-data';
 import { parseBalanceMap } from './parse-balance-map'
 
 import queries from './queries';
+
 import { VESTING_POOL_ID, VESTING_START } from "./constants";
 import redirects from './redirects.json';
+import blacklist from './blacklist.json';
 
 type Info = sushiData.masterchef.Info;
 
@@ -137,6 +139,7 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
 
     return users
         .filter(user => user.amount >= 1e-18)
+        .filter(user => !blacklist.includes(user.address))
         .map(user => {
             const vested = user.amount * fraction;
 
