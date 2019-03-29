@@ -31,6 +31,10 @@ async function main() {
 
     const distribution = await getDistribution(options);
 
+    if(!fs.existsSync('./outputs')) {
+        fs.mkdirSync('./outputs')
+    }
+
     fs.writeFileSync(
         `./outputs/amounts-${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
         JSON.stringify(
