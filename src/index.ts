@@ -137,6 +137,12 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
 
     const fraction = totalVested / totalFarmed;
 
+    console.log(
+        "totalFarmed: ", totalFarmed,
+        "\ntotalVested: ", totalVested,
+        "\nfraction: ", fraction
+    )
+
     return users
         .filter(user => user.amount >= 1e-18)
         .filter(user => !blacklist.includes(user.address))

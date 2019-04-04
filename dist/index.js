@@ -8,6 +8,7 @@ const parse_balance_map_1 = require("./parse-balance-map");
 const queries_1 = __importDefault(require("./queries"));
 const constants_1 = require("./constants");
 const redirects_json_1 = __importDefault(require("./redirects.json"));
+const blacklist_json_1 = __importDefault(require("./blacklist.json"));
 async function getDistribution(options) {
     var _a, _b;
     options.startBlock = (_a = options.startBlock) !== null && _a !== void 0 ? _a : constants_1.VESTING_START;
@@ -86,8 +87,10 @@ function finalize(usersBeginning, usersEnd, totalVested, claims) {
     });
     const totalFarmed = users.reduce((a, b) => a + b.amount, 0);
     const fraction = totalVested / totalFarmed;
+    console.log("totalFarmed: ", totalFarmed, "\ntotalVested: ", totalVested, "\nfraction: ", fraction);
     return users
         .filter(user => user.amount >= 1e-18)
+        .filter(user => !blacklist_json_1.default.includes(user.address))
         .map(user => {
         var _a, _b;
         const vested = user.amount * fraction;

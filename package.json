@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "@sushiswap/sushi-data": "lufycz/sushi-data#vesting",
+    "axios": "^0.21.1",
     "commander": "^7.0.0",
     "ethereumjs-util": "^7.0.8",
     "ethers": "^5.0.31",
@@ -19,6 +20,9 @@
   },
   "scripts": {
     "standalone": "ts-node src/standalone",
+    "generate-blacklist": "ts-node src/generate-blacklist",
+    "validate": "ts-node src/validate-address",
+    "select": "ts-node src/select-data",
     "build": "tsc && browserify dist/index.js > dist/bundle.js"
   }
 }
