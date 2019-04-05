@@ -8132,14 +8132,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sushi_data_1 = __importDefault(require("@sushiswap/sushi-data"));
-const pageResults = require('graph-results-pager');
-// To be changed when the sushiswap subgraph is fixed
-const graphAPIEndpoints = {
-    masterchef: 'https://api.thegraph.com/subgraphs/name/lufycz/masterchef-vesting',
-    //masterchef: 'https://api.thegraph.com/subgraphs/name/sushiswap/master-chef',
-    vesting: "https://api.thegraph.com/subgraphs/name/lufycz/sushiclaimedvesting",
-    blocklytics: 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks'
-};
 exports.default = {
     async info(block_number) {
         return await sushi_data_1.default.masterchef.info({ block: block_number });
@@ -8155,7 +8147,7 @@ exports.default = {
     }
 };
 
-},{"@sushiswap/sushi-data":172,"graph-results-pager":474}],40:[function(require,module,exports){
+},{"@sushiswap/sushi-data":172}],40:[function(require,module,exports){
 module.exports=[
     {
         "from": "0x8135908bbcb583d65978accfe3da6ca927185eb1",
@@ -25193,7 +25185,7 @@ module.exports = {
         exchange_v1: 'https://api.thegraph.com/subgraphs/name/jiro-ono/sushiswap-v1-exchange',
         blocklytics: 'https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks',
         lockup: 'https://api.thegraph.com/subgraphs/name/matthewlilley/lockup',
-        vesting: 'https://api.thegraph.com/subgraphs/name/lufycz/sushiclaimedvesting',
+        vesting: 'https://api.thegraph.com/subgraphs/name/sushiswap/vesting',
     },
 
     graphWSEndpoints: {

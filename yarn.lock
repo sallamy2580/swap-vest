@@ -340,7 +340,7 @@
 
 "@sushiswap/sushi-data@lufycz/sushi-data#vesting":
   version "1.0.6"
-  resolved "https://codeload.github.com/lufycz/sushi-data/tar.gz/538fa2c45f9175d82b06daa91ee6dcb3ac3264a6"
+  resolved "https://codeload.github.com/lufycz/sushi-data/tar.gz/381fb528d5f1676bcc95482286c20fe6c50e9b42"
   dependencies:
     bluebird "^3.7.2"
     commander "6.1.0"
@@ -697,13 +697,6 @@ fs@^0.0.1-security:
 "graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
   version "1.0.3"
   resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
-  dependencies:
-    node-fetch "2.6.1"
-
-graph-results-pager@lufycz/graph-results-pager:
-  version "1.0.3"
-  uid "9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
-  resolved "https://codeload.github.com/lufycz/graph-results-pager/tar.gz/9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 

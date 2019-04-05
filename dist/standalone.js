@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const commander_1 = require("commander");
 const fs_1 = __importDefault(require("fs"));
+const sushi_data_1 = __importDefault(require("@sushiswap/sushi-data"));
 const index_1 = __importDefault(require("./index"));
 const constants_1 = require("./constants");
 const program = new commander_1.Command();
@@ -19,7 +20,7 @@ async function main() {
     const options = {
         startBlock: Number((_a = program.opts().startBlock) !== null && _a !== void 0 ? _a : constants_1.VESTING_START),
         endBlock: Number(program.opts().endBlock),
-        claimBlock: Number((_b = program.opts().claimBlock) !== null && _b !== void 0 ? _b : undefined) //await sushiData.utils.timestampToBlock(Date.now())) - will enable when subgraph switches to mainnet
+        claimBlock: Number((_b = program.opts().claimBlock) !== null && _b !== void 0 ? _b : await sushi_data_1.default.utils.timestampToBlock(Date.now()))
     };
     const distribution = await index_1.default(options);
     if (!fs_1.default.existsSync('./outputs')) {

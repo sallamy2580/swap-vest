@@ -26,7 +26,7 @@ async function main() {
     const options: Options = {
         startBlock: Number(program.opts().startBlock ?? VESTING_START),
         endBlock: Number(program.opts().endBlock),
-        claimBlock: Number(program.opts().claimBlock ?? undefined)//await sushiData.utils.timestampToBlock(Date.now())) - will enable when subgraph switches to mainnet
+        claimBlock: Number(program.opts().claimBlock ?? await sushiData.utils.timestampToBlock(Date.now()))
     }
 
     const distribution = await getDistribution(options);
