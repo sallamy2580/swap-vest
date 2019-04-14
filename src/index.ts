@@ -52,8 +52,9 @@ export default async function getDistribution(options: Options) {
     );
 
     return {
-        amounts: final, 
-        merkle: parseBalanceMap(final)
+        amounts: final.users,
+        blacklisted: final.blacklisted,
+        merkle: parseBalanceMap(final.users)
     };
 }
 
@@ -143,19 +144,35 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
         "\nfraction: ", fraction
     )
 
-    return users
-        .filter(user => user.amount >= 1e-18)
-        .filter(user => !blacklist.includes(user.address))
-        .map(user => {
-            const vested = user.amount * fraction;
+    return {
+        users: users
+            .filter(user => user.amount >= 1e-18)
+            .filter(user => !blacklist.includes(user.address))
+            .map(user => {
+                const vested = user.amount * fraction;
 
-            const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
+                const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
 
-            return ({
-                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                return ({
+                    [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                })
             })
-        })
-        .reduce((a, b) => ({...a, ...b}), {});
+            .reduce((a, b) => ({...a, ...b}), {}),
+
+        blacklisted: users
+            .filter(user => user.amount >= 1e-18)
+            .filter(user => blacklist.includes(user.address))
+            .map(user => {
+                const vested = user.amount * fraction;
+
+                const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
+
+                return ({
+                    [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                })
+            })
+            .reduce((a, b) => ({...a, ...b}), {}),
+    }
 }
 
 function calculateTotalVested(data: Data, options: Options) {

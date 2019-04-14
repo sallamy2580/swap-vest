@@ -17,8 +17,9 @@ async function getDistribution(options) {
     const data = redirect(await fetchData(options.startBlock, options.endBlock, options.claimBlock));
     const final = finalize(consolidate(data.beginning, options.startBlock), consolidate(data.end, options.endBlock), calculateTotalVested(data, options), data.end.claims);
     return {
-        amounts: final,
-        merkle: parse_balance_map_1.parseBalanceMap(final)
+        amounts: final.users,
+        blacklisted: final.blacklisted,
+        merkle: parse_balance_map_1.parseBalanceMap(final.users)
     };
 }
 exports.default = getDistribution;
@@ -88,18 +89,32 @@ function finalize(usersBeginning, usersEnd, totalVested, claims) {
     const totalFarmed = users.reduce((a, b) => a + b.amount, 0);
     const fraction = totalVested / totalFarmed;
     console.log("totalFarmed: ", totalFarmed, "\ntotalVested: ", totalVested, "\nfraction: ", fraction);
-    return users
-        .filter(user => user.amount >= 1e-18)
-        .filter(user => !blacklist_json_1.default.includes(user.address))
-        .map(user => {
-        var _a, _b;
-        const vested = user.amount * fraction;
-        const claimed = (_b = (_a = claims.find(u => user.address === u.id)) === null || _a === void 0 ? void 0 : _a.totalClaimed) !== null && _b !== void 0 ? _b : 0;
-        return ({
-            [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
-        });
-    })
-        .reduce((a, b) => ({ ...a, ...b }), {});
+    return {
+        users: users
+            .filter(user => user.amount >= 1e-18)
+            .filter(user => !blacklist_json_1.default.includes(user.address))
+            .map(user => {
+            var _a, _b;
+            const vested = user.amount * fraction;
+            const claimed = (_b = (_a = claims.find(u => user.address === u.id)) === null || _a === void 0 ? void 0 : _a.totalClaimed) !== null && _b !== void 0 ? _b : 0;
+            return ({
+                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+            });
+        })
+            .reduce((a, b) => ({ ...a, ...b }), {}),
+        blacklisted: users
+            .filter(user => user.amount >= 1e-18)
+            .filter(user => blacklist_json_1.default.includes(user.address))
+            .map(user => {
+            var _a, _b;
+            const vested = user.amount * fraction;
+            const claimed = (_b = (_a = claims.find(u => user.address === u.id)) === null || _a === void 0 ? void 0 : _a.totalClaimed) !== null && _b !== void 0 ? _b : 0;
+            return ({
+                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+            });
+        })
+            .reduce((a, b) => ({ ...a, ...b }), {}),
+    };
 }
 function calculateTotalVested(data, options) {
     const [startBlock, endBlock] = [options.startBlock, options.endBlock];

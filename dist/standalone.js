@@ -28,6 +28,8 @@ async function main() {
     }
     fs_1.default.writeFileSync(`./outputs/amounts-${options.startBlock}-${options.endBlock}.json`, //-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
     JSON.stringify(distribution.amounts, null, 1));
+    fs_1.default.writeFileSync(`./outputs/blacklisted-${options.startBlock}-${options.endBlock}.json`, //-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
+    JSON.stringify(distribution.blacklisted, null, 1));
     fs_1.default.writeFileSync(`./outputs/merkle-${options.startBlock}-${options.endBlock}.json`, //-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
     JSON.stringify(distribution.merkle, null, 1));
 }

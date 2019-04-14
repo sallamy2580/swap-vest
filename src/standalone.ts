@@ -43,6 +43,13 @@ async function main() {
     );
 
     fs.writeFileSync(
+        `./outputs/blacklisted-${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
+        JSON.stringify(
+            distribution.blacklisted, null, 1
+        )
+    );
+
+    fs.writeFileSync(
         `./outputs/merkle-${options.startBlock}-${options.endBlock}.json`,//-${options.claimBlock}}`, - will enable when subgraph switches to mainnet
         JSON.stringify(
             distribution.merkle, null, 1
