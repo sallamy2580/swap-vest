@@ -154,9 +154,12 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
                 const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
 
                 return ({
-                    [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                    address: user.address,
+                    vested: BigInt(Math.floor((vested - claimed) * 1e18))
                 })
             })
+            .filter(user => user.vested >= BigInt(0))
+            .map(user => ({[user.address]: String(user.vested)}))
             .reduce((a, b) => ({...a, ...b}), {}),
 
         blacklisted: users
@@ -168,9 +171,12 @@ function finalize(usersBeginning: UsersConsolidated, usersEnd: UsersConsolidated
                 const claimed = claims.find(u => user.address === u.id)?.totalClaimed ?? 0;
 
                 return ({
-                    [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                    address: user.address,
+                    vested: BigInt(Math.floor((vested - claimed) * 1e18))
                 })
             })
+            .filter(user => user.vested >= BigInt(0))
+            .map(user => ({[user.address]: String(user.vested)}))
             .reduce((a, b) => ({...a, ...b}), {}),
     }
 }
