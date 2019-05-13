@@ -9,5 +9,11 @@
         "from": "0x3a6ab6726dab32b8fca113bb48f176e4accd79b6",
         "to": "0x19172dde1570107bfba26ab156ae64d566e2f0e2",
         "proof": "https://etherscan.io/verifySig/2354"
+    },
+
+    {
+        "from": "0xb1adceddb2941033a090dd166a462fe1c2029484",
+        "to": "0xd409cea9dd8db30504168063953ce1fa20748cab",
+        "proof": "Requested by 0xMaki"
     }
 ]
