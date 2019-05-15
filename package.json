@@ -1,8 +1,11 @@
 {
-  "name": "sushi-vesting-query",
+  "name": "@sushiswap/sushi-vesting-query",
   "author": "LufyCZ",
   "version": "1.0.0",
   "main": "dist/index.js",
+  "files": [
+    "/dist"
+  ],
   "license": "MIT",
   "dependencies": {
     "@sushiswap/sushi-data": "lufycz/sushi-data#vesting",
@@ -22,6 +25,6 @@
     "generate-blacklist": "ts-node src/generate-blacklist",
     "validate": "ts-node src/validate-address",
     "select": "ts-node src/select-data",
-    "build": "tsc && browserify dist/index.js > dist/bundle.js"
+    "build": "tsc"
   }
 }
