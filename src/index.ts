@@ -21,9 +21,9 @@ type UsersConsolidated = {
 }[];
 
 type Options = {
-    startBlock: number | undefined,
+    startBlock?: number,
     endBlock: number,
-    claimBlock: number | undefined
+    claimBlock?: number
 };
 
 type DataPart = {

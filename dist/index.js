@@ -98,9 +98,12 @@ function finalize(usersBeginning, usersEnd, totalVested, claims) {
             const vested = user.amount * fraction;
             const claimed = (_b = (_a = claims.find(u => user.address === u.id)) === null || _a === void 0 ? void 0 : _a.totalClaimed) !== null && _b !== void 0 ? _b : 0;
             return ({
-                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                address: user.address,
+                vested: BigInt(Math.floor((vested - claimed) * 1e18))
             });
         })
+            .filter(user => user.vested >= BigInt(0))
+            .map(user => ({ [user.address]: String(user.vested) }))
             .reduce((a, b) => ({ ...a, ...b }), {}),
         blacklisted: users
             .filter(user => user.amount >= 1e-18)
@@ -110,9 +113,12 @@ function finalize(usersBeginning, usersEnd, totalVested, claims) {
             const vested = user.amount * fraction;
             const claimed = (_b = (_a = claims.find(u => user.address === u.id)) === null || _a === void 0 ? void 0 : _a.totalClaimed) !== null && _b !== void 0 ? _b : 0;
             return ({
-                [user.address]: String(BigInt(Math.floor((vested - claimed) * 1e18)))
+                address: user.address,
+                vested: BigInt(Math.floor((vested - claimed) * 1e18))
             });
         })
+            .filter(user => user.vested >= BigInt(0))
+            .map(user => ({ [user.address]: String(user.vested) }))
             .reduce((a, b) => ({ ...a, ...b }), {}),
     };
 }
