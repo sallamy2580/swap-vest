@@ -1,6 +1,5 @@
 # sushi-vesting-query
 
-HEY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 This is a script that fetches the pending and harvested Sushi at the specified blocks, and then calculates the resulting vested Sushi.
 
